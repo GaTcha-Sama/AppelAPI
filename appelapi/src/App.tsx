@@ -10,17 +10,20 @@ interface User {
   picture: {
     medium: string;
   };
-  location: {
-    street: {
-      number: number;
-      name: string;
-    };
-    city: string;
-    state: string;
-    country: string;
-    postcode: string;
+}
+
+interface ExpandedUser {
+location: {
+  street: {
+    number: number;
+    name: string;
   };
-  phone: string;
+  city: string;
+  state: string;
+  country: string;
+  postcode: string;
+};
+phone: string;
 }
 
 const UserGrid: React.FC = () => {
@@ -41,7 +44,22 @@ const UserGrid: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    fetchExpandedUsers();
+  }, []);
+
+  const fetchExpandedUsers = async () => {
+    try {
+      const response = await fetch('https://randomuser.me/api/?results=10');
+      const data = await response.json();
+      setExpandedUsers(data.results);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
   return (
+    <>
     <div>
       {users.map((user, index) => (
         <div key={index}>
@@ -55,6 +73,21 @@ const UserGrid: React.FC = () => {
         </div>
       ))}
     </div>
+    <button></button>
+    <div>
+      {expandedUsers.map((expandedUser, index) => (
+        <div key={index}>
+          <p>{expandedUser.location.street.number}</p>
+          <p>{expandedUser.location.street.name}</p>
+          <p>{expandedUser.location.city}</p>
+          <p>{expandedUser.location.state}</p>
+          <p>{expandedUser.location.country}</p>
+          <p>{expandedUser.location.postcode}</p>          
+          <p>{expandedUser.phone}</p>
+        </div>
+      ))}
+    </div>
+    </>
 )};
 
 export default UserGrid;
