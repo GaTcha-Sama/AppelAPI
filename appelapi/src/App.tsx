@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css'
 
 interface User {
   name: {
@@ -25,8 +26,7 @@ interface User {
 
 const UserGrid: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [expandedUsers, setExpandedUsers] = useState<ExpandedUser[]>([]);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedUsers, setExpandedUsers] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     fetchUsers();
@@ -42,31 +42,30 @@ const UserGrid: React.FC = () => {
     }
   };
 
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
+  const toggleExpanded = (index: number) => {
+    setExpandedUsers(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
   };
 
   return (
-    <>
-      <div>
-        {users.map((user, index) => (
-          <div key={index}>
-            <img src={user.picture.medium} alt={`${user.name.first} ${user.name.last}`} />
-            <h3>
-              {`${user.name.title} 
-              ${user.name.first} 
-              ${user.name.last}`}
-            </h3>
-            <p>{user.email}</p>
-          </div>
-        ))}
-      </div>
-      <button onClick={toggleExpanded}>{isExpanded ? '-' : '+'}</button>
-      {isExpanded && (
-        <div>
-          {users.map((user, index) => (
-            <div key={index}>
-              <p>Adress: {user.location.street.number}</p>
+    <div className='user-grid'>
+      {users.map((user, index) => (
+        <div key={index} className='user-card'>
+          <img src={user.picture.medium} alt={`${user.name.first} ${user.name.last}`} />
+          <h3>
+            {`${user.name.title} 
+            ${user.name.first} 
+            ${user.name.last}`}
+          </h3>
+          <p>{user.email}</p>
+          <button className='toggle-button' onClick={() => toggleExpanded(index)}>
+            {expandedUsers[index] ? '-' : '+'}
+          </button>
+          {expandedUsers[index] && (
+            <div>
+              <p>Address: {user.location.street.number}</p>
               <p>Street: {user.location.street.name}</p>
               <p>City: {user.location.city}</p>
               <p>State: {user.location.state}</p>
@@ -74,10 +73,10 @@ const UserGrid: React.FC = () => {
               <p>Postcode: {user.location.postcode}</p>          
               <p>Phone: {user.phone}</p>
             </div>
-          ))}
+          )}
         </div>
-      )}
-    </>
+      ))}
+    </div>
   );
 };
 
