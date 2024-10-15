@@ -25,6 +25,7 @@ interface User {
 
 const UserGrid: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [expandedUsers, setExpandedUsers] = useState<ExpandedUser[]>([]);
 
   useEffect(() => {
     fetchUsers();
@@ -32,7 +33,7 @@ const UserGrid: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('https://randomuser.me');
+      const response = await fetch('https://randomuser.me/api/?results=10');
       const data = await response.json();
       setUsers(data.results);
     } catch (error) {
@@ -42,9 +43,18 @@ const UserGrid: React.FC = () => {
 
   return (
     <div>
-     <p>hello</p>    
+      {users.map((user, index) => (
+        <div key={index}>
+          <img src={user.picture.medium} alt={`${user.name.first} ${user.name.last}`} />
+          <h3>
+            {`${user.name.title} 
+            ${user.name.first} 
+            ${user.name.last}`}
+          </h3>
+          <p>{user.email}</p>
+        </div>
+      ))}
     </div>
-  );
-};
+)};
 
 export default UserGrid;
