@@ -24,9 +24,9 @@ interface User {
   phone: string;
 }
 
-const.UserGrid: React.FC = () => {
+const UserGrid: React.FC = () => {
   const [users, setUsers] = useState<User[]>([])}
-  const [expendedUsers, setExpandedUsers] = useState<expandedUsers[]>([])
+  const [expandedUsers, setExpandedUsers] = useState<ExpandedUsers[]>([])
 
   useEffect(() => {
     fetchUsers();
@@ -34,19 +34,22 @@ const.UserGrid: React.FC = () => {
 
 const fetchUsers = async = () => {
   try {
+    const response = await fetch('https://randomeuser.me');
+    const data = await response.json();
+    setUsers(data.results);
 
-  } catch(error) {console.log(error)}
+  } catch(error) {console.log('Error fetching users', error)}
 }
-
-function App() {
 
   return (
-    <>
       <div>
-        
+        <img />
+        <h2>nom prenom</h2>
+        <h1>email</h1>
+        <button onClick={}>
+          
+        </button>
       </div>
-    </>
   )
-}
 
-export default App
+export default UserGrid
