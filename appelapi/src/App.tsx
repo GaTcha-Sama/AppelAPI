@@ -24,6 +24,20 @@ interface User {
   phone: string;
 }
 
+const.UserGrid: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([])}
+  const [expendedUsers, setExpandedUsers] = useState<expandedUsers[]>([])
+
+  useEffect(() => {
+    fetchUsers();
+  }, [])
+
+const fetchUsers = async = () => {
+  try {
+
+  } catch(error) {console.log(error)}
+}
+
 function App() {
 
   return (
