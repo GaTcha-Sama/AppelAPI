@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import React, { useState, useEffect } from 'react';
 
 interface User {
   name: {
@@ -25,31 +24,27 @@ interface User {
 }
 
 const UserGrid: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([])}
-  const [expandedUsers, setExpandedUsers] = useState<ExpandedUsers[]>([])
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     fetchUsers();
-  }, [])
+  }, []);
 
-const fetchUsers = async = () => {
-  try {
-    const response = await fetch('https://randomeuser.me');
-    const data = await response.json();
-    setUsers(data.results);
-
-  } catch(error) {console.log('Error fetching users', error)}
-}
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('https://randomuser.me');
+      const data = await response.json();
+      setUsers(data.results);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
 
   return (
-      <div>
-        <img />
-        <h2>nom prenom</h2>
-        <h1>email</h1>
-        <button onClick={}>
-          
-        </button>
-      </div>
-  )
+    <div>
+     <p>hello</p>    
+    </div>
+  );
+};
 
-export default UserGrid
+export default UserGrid;
