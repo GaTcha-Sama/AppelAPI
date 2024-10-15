@@ -64,7 +64,7 @@ const UserGrid: React.FC = () => {
             {expandedUsers[index] ? '-' : '+'}
           </button>
           {expandedUsers[index] && (
-            <div>
+            <div className='expandeduser-card'>
               <p>Address: {user.location.street.number}</p>
               <p>Street: {user.location.street.name}</p>
               <p>City: {user.location.city}</p>
