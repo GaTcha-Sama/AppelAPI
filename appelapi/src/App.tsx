@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css'
+import { useFetch } from './useFetch';
 
-interface User {
+type ApiResponse = {
+  results: User[];
+  infos: any
+}
+type User = {
   name: {
     title: string;
     first: string;
@@ -25,22 +30,20 @@ interface User {
 }
 
 const UserGrid: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const{error, loading, results} = useFetch<ApiResponse>({url : 'https://randomuser.me/api/?results=10'})
   const [expandedUsers, setExpandedUsers] = useState<{ [key: number]: boolean }>({});
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+ if(loading) {
+  return <div>
+      Loading : en cours de chargement
+    </div>
+ }
 
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch('https://randomuser.me/api/?results=10');
-      const data = await response.json();
-      setUsers(data.results);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
-  };
+ if(error) {
+  return <div>
+    Error : {error}
+  </div>
+ }
 
   const toggleExpanded = (index: number) => {
     setExpandedUsers(prev => ({
@@ -48,10 +51,11 @@ const UserGrid: React.FC = () => {
       [index]: !prev[index]
     }));
   };
+  if(!results) return;
 
   return (
     <div className='user-grid'>
-      {users.map((user, index) => (
+      {results.results.map((user, index) => (
         <div key={index} className='user-card'>
           <img src={user.picture.medium} alt={`${user.name.first} ${user.name.last}`} />
           <h3>
